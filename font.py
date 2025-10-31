@@ -1,17 +1,23 @@
 from PIL import Image, ImageDraw, ImageFont
 import textwrap
+from pathlib import Path
 
 def create_subtitle_image_with_text_margin(
     text,
     video_size=(1080, 1920),
-    font_path="C:/Windows/Fonts/meiryo.ttc",
+    # --- 修正点 1: デフォルトのフォントパスを .ttf に変更 ---
+    font_path="NotoSansJP-Regular.ttf",
+    # -----------------------------------------------------
     font_size=80,
     outline_width=5,
     max_chars_per_line=12,
     text_horizontal_margin=40
 ):
     width, height = video_size
-    font = ImageFont.truetype(font_path, font_size)
+    
+    # フォントパスを Path オブジェクト経由にする
+    font = ImageFont.truetype(str(Path(font_path)), font_size)
+    
     lines = textwrap.wrap(text, width=max_chars_per_line)
 
     line_spacing = 5
@@ -49,30 +55,21 @@ def create_subtitle_image_with_text_margin(
 
         y_text += line_height_draw
         
-        # --- ★ 修正点 1: ループ内の以下の2行を削除 ---
-        # long_text_img = create_subtitle_image_with_text_margin(text)
-        # long_text_img.save("subtitle_text_margin_fixed_height_long.png")
+    # 相対パスに変更
+    save_path = Path("subtitle_teuxt_margin_fixed_height_long.png")
 
-    # --- ★ 修正点 2: for ループの外側 (関数が終わる前) に保存処理を追加 ---
-    # main.py が読み込む用の固定パス
-    save_path = r"C:\Users\ami\python\subtitle_text_margin_fixed_height_long.png"
-    # ここまでに描画した「img」を保存する
-    img.save(save_path)
+    img.save(str(save_path)) 
 
-    # if __name__ == "__main__": のテスト用に img を返す
     return img
 
 
 # サンプル使用
 if __name__ == "__main__":
-    subtitle_img = create_subtitle_image_with_text_margin(
-        "これは左右に余白を持たせた字幕です。長い文章でも見切れません。"
-    )
-    subtitle_img.save("subtitle_text_margin_fixed_height.png")
     
+    # --- 修正点 2: テスト実行時も、ファイル名を .ttf に変更 ---
+    test_font_path = "NotoSansJP-Regular.ttf"
+   
     long_text_img = create_subtitle_image_with_text_margin(
-        "これは長文のテストです。"
+        "これは長文のテストです。",
+        font_path=test_font_path 
     )
-    # (long.png は関数内で上書き保存されるので、ここの save は不要だが、
-    #  動作確認のため残してもOK)
-    # long_text_img.save("subtitle_text_margin_fixed_height_long.png")

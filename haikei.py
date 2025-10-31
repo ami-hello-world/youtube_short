@@ -5,6 +5,7 @@ import os
 
 def download_random_vertical_video(filename="main.mp4") -> str | None:
     PIXABAY_API_KEY = os.getenv('PIXABAY_API_KEY')
+    print(PIXABAY_API_KEY)
     url = "https://pixabay.com/api/videos/"
     per_page = 10
     CATEGORIES = ["animals"]
@@ -63,4 +64,5 @@ def download_random_vertical_video(filename="main.mp4") -> str | None:
     print(f"カテゴリ '{chosen_category}' で縦型動画が見つかりませんでした。")
     return None
 
-download_random_vertical_video(filename="main.mp4")
+if __name__ == "__main__":
+    download_random_vertical_video(filename="main.mp4")
