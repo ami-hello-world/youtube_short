@@ -13,18 +13,33 @@ from llm import select_input
 from moviepy.video.VideoClip import ImageClip
 from haikei import download_random_vertical_video
 from font import create_subtitle_image_with_text_margin
+from pathlib import Path # <<< pathlib をインポート
 
 def main():
     clips = []
     phrase = select_input()
-    fixed_image_path = r"C:\Users\ami\python\subtitle_text_margin_fixed_height_long.png"
+    
+    # --- 修正点: カレントディレクトリに保存するようにパスを変更 ---
+    # output_dir = Path("YOUTUBE_SHORT") # この行を削除
+    fixed_image_path = Path("subtitle_teuxt_margin_fixed_height_long.png")
+    audio_file_path = Path("last_output.wav")
+    # ----------------------------------------------
+
     for u in phrase:
         text_to_voice(u)
-        audio = AudioFileClip(r"C:\Users\ami\python\last_output.wav")
+        
+        # --- 修正点: pathlib オブジェクトを str() で文字列に変換して渡す ---
+        audio = AudioFileClip(str(audio_file_path))
+        # -----------------------------------------------------------------
+        
         voice_len = audio.duration
         create_subtitle_image_with_text_margin(u)
         text_clip = (
-            ImageClip(fixed_image_path) 
+            
+            # --- 修正点: pathlib オブジェクトを str() で文字列に変換して渡す ---
+            ImageClip(str(fixed_image_path)) 
+            # -----------------------------------------------------------------
+            
             .set_duration(voice_len)
         )
         video = text_clip.set_audio(audio)
@@ -50,7 +65,6 @@ def main():
     result = CompositeVideoClip([final_bg, final])
     result.write_videofile("final.mp4", fps=24)
     print("完了: 'final.mp4' (背景 + 字幕) が作成されました。")
-
 
 if __name__ == "__main__":
     main()
