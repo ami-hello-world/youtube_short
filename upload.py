@@ -10,7 +10,7 @@ import os
 # -----------------------------
 SCOPES = ['https://www.googleapis.com/auth/youtube.upload']
 TOKEN_FILE = 'token.json'
-CLIENT_SECRET_FILE = "client_secret_313666857757-882gvch9ums16naq2e9meqjl0angkvcd.apps.googleusercontent.com.json"
+CLIENT_SECRET_FILE = "client_secret_2_313666857757-882gvch9ums16naq2e9meqjl0angkvcd.apps.googleusercontent.com.json"
 
 # -----------------------------
 # 認証取得
@@ -32,7 +32,7 @@ def get_credentials():
 # -----------------------------
 # YouTube アップロード
 # -----------------------------
-def upload_youtube_video(title, description, privacy='private', video_path="final.mp4"):
+def upload_youtube_video(title, description, privacy="public", video_path="final.mp4"):
     creds = get_credentials()
     youtube = build('youtube', 'v3', credentials=creds)
     

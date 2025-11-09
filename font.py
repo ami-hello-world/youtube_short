@@ -6,7 +6,7 @@ def create_subtitle_image_with_icon(
     text,
     output_filename="subtitle.png",
     video_size=(1080, 1920),
-    font_path="NotoSansJP-Regular.ttf",
+    font_path="NotoSansJP-Black.ttf",
     icon_path=None,
     character_name=None,
     font_size=80,

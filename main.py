@@ -9,7 +9,7 @@ from moviepy.audio.io.AudioFileClip import AudioFileClip
 from moviepy.video.compositing.concatenate import concatenate_videoclips
 from moviepy.video.fx.all import resize
 from TTS import text_to_voicevox
-from llm import create_short_script_voicevox, text_line
+from llm import create_short_script_voicevox, text_line,huri
 from moviepy.video.VideoClip import ImageClip
 from haikei import download_random_vertical_video
 from font import create_subtitle_image_with_icon
@@ -21,6 +21,7 @@ from upload import upload_youtube_video
 from moviepy.audio.AudioClip import CompositeAudioClip
 from moviepy.audio.fx.all import audio_loop
 from moviepy.audio.io.AudioFileClip import AudioFileClip
+import datetime
 
 def main():
     title, conversation_data  = sc()
@@ -41,7 +42,8 @@ def main():
         # 長文ごとの音声生成
         long_text = "".join(phrases)
         audio_path = f"temp_audio_{idx}.wav"
-        text_to_voicevox(long_text, style_id, audio_path)
+        h= huri(long_text)
+        text_to_voicevox(h, style_id, audio_path)
         audio = AudioFileClip(audio_path)
         audio_clips.append(audio)
         
@@ -85,23 +87,27 @@ def main():
     music = music.volumex(0.3)
     final_audio = CompositeAudioClip([full_audio, music])
     final = final.set_audio(final_audio)
+    bom = AudioFileClip("bom.mp3")
+    final_audio = concatenate_audioclips([final_audio, bom])
+    final = final.set_audio(final_audio)
+
     try:
         final.write_videofile("final.mp4", fps=24)
         print("完了: 'final.mp4' (背景 + 字幕) が作成されました。")
-
+        
         # 生成成功時にYouTubeへアップロード
-        """
         upload_youtube_video(
             title=title,  # ネタの冒頭30文字をタイトルに
             description="VOICEVOX:麒ヶ島宗麟,白上虎太郎,四国めたん,玄野武宏,ずんだもん,青山龍星,春日部つむぎ,波音リツ,剣崎雌雄,代屋モント にじボイス #2ch面白いスレ #2chまとめ #2ch #くまさん #くま #くまさんショート #くまショート",
-            privacy="private",
+            privacy="public",
             video_path="final.mp4"
         )
-        """
         print("✅ YouTubeへのアップロードを開始しました。")
-
+        dt_now = datetime.datetime.now()
+        print(dt_now)
     except Exception as e:
         print(f"❌ 動画生成中にエラーが発生しました: {e}")
-
+        dt_now = datetime.datetime.now()
+        print(dt_now)
 if __name__ == "__main__":
     main()
