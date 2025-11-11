@@ -96,12 +96,14 @@ def main():
         print("完了: 'final.mp4' (背景 + 字幕) が作成されました。")
         
         # 生成成功時にYouTubeへアップロード
+        
         upload_youtube_video(
             title=title,  # ネタの冒頭30文字をタイトルに
             description="VOICEVOX:麒ヶ島宗麟,白上虎太郎,四国めたん,玄野武宏,ずんだもん,青山龍星,春日部つむぎ,波音リツ,剣崎雌雄,代屋モント にじボイス #2ch面白いスレ #2chまとめ #2ch #くまさん #くま #くまさんショート #くまショート",
             privacy="public",
             video_path="final.mp4"
         )
+        
         print("✅ YouTubeへのアップロードを開始しました。")
         dt_now = datetime.datetime.now()
         print(dt_now)
@@ -109,5 +111,6 @@ def main():
         print(f"❌ 動画生成中にエラーが発生しました: {e}")
         dt_now = datetime.datetime.now()
         print(dt_now)
+        
 if __name__ == "__main__":
     main()
